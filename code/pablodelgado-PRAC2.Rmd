@@ -121,7 +121,8 @@ The data set allows for several new combinations of attributes and attribute exc
 
         1. Certain infectious and parasitic diseases
         2. II Neoplasms
-        3. Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism
+        3. Diseases of the blood and blood-forming organs and certain 
+        disorders involving the immune mechanism
         4. Endocrine, nutritional and metabolic diseases
         5. Mental and behavioural disorders
         6. Diseases of the nervous system
@@ -172,9 +173,9 @@ Dado que el archivo es un csv y solo tiene 740 observaciones, primero haremos un
 
 Dicho eso comenzaremos con el tratamiento del dataset. 
 
-******
+
 ## 2. Integración y selección de los datos de interés a analizar
-******
+
 
 En el caso de nuestro dataset no sera necesario realizar integracion con otros datasets ni tampoco realizar una seleccion o filtrado de los datos antes de analizarlos. Ya que todo esto fue realizado previamente por el equipo de personas que creo el proyecto en UCI.
 
@@ -216,7 +217,7 @@ Pero antes de comenzar a sacar conclusiones sobres los datos y empezar a cruzar 
 * Body.mass.index
 * Absenteeism.time.in.hours
 
-Ya que para age ya hemos visto que tenemos bastante dispersos las edades y mejor agruparlas por los clasicos rangos de edad. Con la distancia nos paso algo similar.
+Ya que para age ya hemos visto que tenemos bastante dispersos las edades y mejor agruparlas por los clasicos rangos de edad. Con la distancia nos pasa algo similar.
 
 Para Body mass index al ser un indice nos dice poco sin contrastarlo con algo que conozcamos asi que mejor agruparlo segun los criterios que se los suele analizar a nivel medico:
 
@@ -344,9 +345,9 @@ abs_df <- abs_df %>% mutate(absenteeism_range = case_when
 
 Dicho eso y luego de haber agregado los campos descriptivos y discretizado sigamos analizando el resto de las variables en la siguiente seccion de limpieza. Donde analiceremos valores vacios, valores extremos, etc..
 
-******
+
 ## 3. Limpieza de los datos
-******
+
 
 Hacemos las primeros chequeos del contenido del dataset:
 ```{r}
@@ -386,11 +387,16 @@ Probemos tambien dos mas, la educacion de los empleados con la cantidad de horas
 
 ```{r}
 
-a = ggplot(abs_df,aes(x=Month.of.absence,fill=Month.of.absence))+geom_bar(fill="lightblue")+theme_bw()
+a = ggplot(abs_df,aes(x=Month.of.absence,fill=Month.of.absence))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
 
-b = ggplot(abs_df,aes(x=Education,fill=Education))+geom_bar(fill="lightblue")+theme_bw()
+b = ggplot(abs_df,aes(x=Education,fill=Education))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
 
-c = ggplot(abs_df,aes(x=Absenteeism.time.in.hours,fill=Absenteeism.time.in.hours))+geom_bar(fill="lightblue")+theme_bw()
+c = ggplot(abs_df,aes(x=Absenteeism.time.in.hours,fill=Absenteeism.time.in.hours))+
+  geom_bar(fill="lightblue")+theme_bw()
 
 grid.arrange(a, b, nrow = 1, ncol = 2)
 
@@ -400,7 +406,9 @@ grid.arrange(c, nrow = 1)
 table(abs_df$Month.of.absence)
 
 # Chequeemos esos datos:
-select(filter(abs_df, Month.of.absence ==0), ID,Reason.for.absence,Day.of.the.week, Education, Absenteeism.time.in.hours)
+select(filter(abs_df, Month.of.absence ==0),
+       ID,Reason.for.absence,Day.of.the.week,Education,Absenteeism.time.in.hours)
+
 ```
 
 En cuanto a los datos con mes no informado, luego podriamos eliminar estos registros ya que como vemos:
@@ -441,9 +449,9 @@ Lo que vemos aqui por ej para education es que si bien esos valores parecen extr
 Mientras que para las horas de ausencia sucede algo similar, siempre habra casos particulares donde personas se ausenten por razones imprevistas y seran los menos. Y es justamente una de los objetivos de este estudio. Entender no solo las posibles horas de ausencia habituales, sino las de incluso casos extraños.
 
 
-******
+
 ## 4. Análisis de los datos
-******
+
 
 ### 4.1. Analisis descriptivo
 
@@ -451,34 +459,57 @@ Esta vez arranquemos realizando un EDA mas exhaustivo:
 
 ```{r}
 
-pet = ggplot(abs_df,aes(x=Pet,fill=Pet))+geom_bar(fill="lightblue")+theme_bw()
-Seasons = ggplot(abs_df,aes(x=Seasons.Desc,fill=Seasons.Desc))+geom_bar(fill="lightblue")+theme_bw()
+pet = ggplot(abs_df,aes(x=Pet,fill=Pet))+geom_bar(fill="lightblue")+
+  theme_bw()
+Seasons = ggplot(abs_df,aes(x=Seasons.Desc,fill=Seasons.Desc))+
+  geom_bar(fill="lightblue")+theme_bw()
 
-age = ggplot(abs_df,aes(x=Age,fill=Age))+geom_bar(fill="lightblue")+theme_bw()
-day = ggplot(abs_df,aes(x=Day.of.the.week,fill=Day.of.the.week))+geom_bar(fill="lightblue")+theme_bw()
+age = ggplot(abs_df,aes(x=Age,fill=Age))+geom_bar(fill="lightblue")+
+  theme_bw()
+day = ggplot(abs_df,aes(x=Day.of.the.week,fill=Day.of.the.week))+
+  geom_bar(fill="lightblue")+theme_bw()
 
-disciplinary = ggplot(abs_df,aes(x=Disciplinary.failure,fill=Disciplinary.failure))+geom_bar(fill="lightblue")+theme_bw()
-distance = ggplot(abs_df,aes(x=Distance.from.Residence.to.Work,fill=Distance.from.Residence.to.Work))+geom_bar(fill="lightblue")+theme_bw()
+disciplinary = ggplot(abs_df,aes(x=Disciplinary.failure,
+                                 fill=Disciplinary.failure))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
 
-drinker = ggplot(abs_df,aes(x=Social.drinker,fill=Social.drinker))+geom_bar(fill="lightblue")+theme_bw()
-smoker = ggplot(abs_df,aes(x=Social.smoker,fill=Social.smoker))+geom_bar(fill="lightblue")+theme_bw()
+distance = ggplot(abs_df,aes(x=Distance.from.Residence.to.Work,
+                             fill=Distance.from.Residence.to.Work))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
+
+drinker = ggplot(abs_df,aes(x=Social.drinker,fill=Social.drinker))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
+
+smoker = ggplot(abs_df,aes(x=Social.smoker,fill=Social.smoker))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
 
 
-weight = ggplot(abs_df,aes(x=Weight,fill=Weight))+geom_bar(fill="lightblue")+theme_bw()
-mass = ggplot(abs_df,aes(x=Body.mass.index,fill=Body.mass.index))+geom_bar(fill="lightblue")+theme_bw()
+weight = ggplot(abs_df,aes(x=Weight,fill=Weight))+
+  geom_bar(fill="lightblue")+
+  theme_bw()
+mass = ggplot(abs_df,aes(x=Body.mass.index,fill=Body.mass.index))+
+  geom_bar(fill="lightblue")+theme_bw()
 
-grid.arrange(pet,Seasons, age, day, disciplinary, distance, drinker, smoker, weight, mass, nrow = 5, ncol = 2)
+grid.arrange(pet,Seasons, age, day, disciplinary, distance, drinker, smoker,
+             weight, mass, nrow = 5, ncol = 2)
 
-#library(forcats)
 reason = ggplot(abs_df) +
     geom_bar(aes(x = forcats::fct_infreq(Reason.for.absence.Desc)
                  #,fill="Education"
-                 ), fill="lightblue")+theme_bw()+theme(axis.text.x=element_text(size=8,angle=90))
+                 ), fill="lightblue")+
+  theme_bw()+theme(axis.text.x=element_text(size=8,angle=90))
 
 grid.arrange(reason, nrow = 1)
 
 
-absenteeism = ggplot(abs_df)+geom_bar(aes(x=forcats::fct_infreq(as.factor(Absenteeism.time.in.hours) )),fill="lightblue")+theme_bw()
+absenteeism = ggplot(abs_df)+
+  geom_bar(aes(x=forcats::fct_infreq(as.factor(Absenteeism.time.in.hours))),
+           fill="lightblue")+
+  theme_bw()
 
 grid.arrange(absenteeism, nrow = 1)
 
@@ -490,25 +521,41 @@ Vemos ahora como quedaron distribuidos los datos de estas variables post discret
 ```{r}
 
 # Comparacion age y age discretizada
-ant = ggplot(abs_df,aes(x=Age,fill=Age))+geom_bar(fill="lightblue")+xlab("Age Before")+theme_bw()
-desp = ggplot(abs_df,aes(x=age_range,fill=age_range))+geom_bar(fill="lightblue")+xlab("Age After")+theme_bw()
+ant = ggplot(abs_df,aes(x=Age,fill=Age))+geom_bar(fill="lightblue")+
+  xlab("Age Before")+theme_bw()
+
+desp = ggplot(abs_df,aes(x=age_range,fill=age_range))+
+  geom_bar(fill="lightblue")+xlab("Age After")+theme_bw()
 grid.arrange(ant,desp, nrow = 1, ncol = 2)
 
 # Distancia y Distancia discretizada
-ant = ggplot(abs_df,aes(x=Distance.from.Residence.to.Work,fill=Distance.from.Residence.to.Work))+geom_bar(fill="lightblue")+xlab("Distance Before")+theme_bw()
-desp = ggplot(abs_df,aes(x=distance_range,fill=distance_range))+geom_bar(fill="lightblue")+xlab("Distance After")+theme_bw()
+ant = ggplot(abs_df,aes(x=Distance.from.Residence.to.Work,
+                        fill=Distance.from.Residence.to.Work))+
+  geom_bar(fill="lightblue")+xlab("Distance Before")+theme_bw()
+
+desp = ggplot(abs_df,aes(x=distance_range,fill=distance_range))+
+  geom_bar(fill="lightblue")+xlab("Distance After")+theme_bw()
+
 grid.arrange(ant,desp, nrow = 1, ncol = 2)
 
 # BMI y BMI discretizada
-ant = ggplot(abs_df,aes(x=Body.mass.index,fill=Body.mass.index))+geom_bar(fill="lightblue")+xlab("BMI Before")+theme_bw()
-desp = ggplot(abs_df,aes(x=BMI,fill=BMI))+geom_bar(fill="lightblue")+xlab("BMI After")+theme_bw()
+ant = ggplot(abs_df,aes(x=Body.mass.index,fill=Body.mass.index))+
+  geom_bar(fill="lightblue")+xlab("BMI Before")+theme_bw()
+
+desp = ggplot(abs_df,aes(x=BMI,fill=BMI))+geom_bar(fill="lightblue")+
+  xlab("BMI After")+theme_bw()
+
 grid.arrange(ant,desp, nrow = 1, ncol = 2)
 
 
 # Horas de Ausentimos discretizada
-ant = ggplot(abs_df)+geom_bar(aes(x=forcats::fct_infreq(as.factor(Absenteeism.time.in.hours) )),fill="lightblue")+xlab("Absenteeism Before")+theme_bw()
+ant = ggplot(abs_df)+
+  geom_bar(aes(x=forcats::fct_infreq(as.factor(Absenteeism.time.in.hours) )),
+           fill="lightblue")+xlab("Absenteeism Before")+theme_bw()
 
-desp = ggplot(abs_df)+geom_bar(aes(x=forcats::fct_infreq(as.factor(absenteeism_range) )),fill="lightblue")+xlab("Absenteeism After")+theme_bw() 
+desp = ggplot(abs_df)+
+  geom_bar(aes(x=forcats::fct_infreq(as.factor(absenteeism_range) )),
+           fill="lightblue")+xlab("Absenteeism After")+theme_bw() 
  
 grid.arrange(ant,desp, nrow = 1, ncol = 2)
 ```
@@ -518,11 +565,18 @@ Comencemos ahora a contrastar variables, encontrar correlaciones, etc.. en defin
 
 * Education y Ausentismo
 ```{r}
-# Segun el nivel educativo no cambia mucho el % de horas de ausentismo es parejo en todos los niveles, el mayor porcentaje ronda entre unas horas y un dia entero. No mucho mas que eso.
-ggplot(abs_df,aes(x=Education.Desc,fill=absenteeism_range))+geom_bar(position="fill")+xlab("Absenteeism Absoluto")
+# Segun el nivel educativo no cambia mucho el % de horas de ausentismo es parejo
+# en todos los niveles, el mayor porcentaje ronda entre unas horas y un dia 
+# entero. No mucho mas que eso.
 
-# Pero ahora, si es muy evidente que la mayor cantidad de personas que se ausentan son las que alcanzaron solo el High School, en el resto de los niveles el ausentismo se reduce notablemente.
-ggplot(abs_df,aes(x=absenteeism_range,fill=Education.Desc))+geom_bar(position="fill")+xlab("Absenteeism Fill")
+ggplot(abs_df,aes(x=Education.Desc,fill=absenteeism_range))+
+  geom_bar(position="fill")+xlab("Absenteeism Absoluto")
+
+# Pero ahora, si es muy evidente que la mayor cantidad de personas que se
+# ausentan son las que alcanzaron solo el High School, en el resto de los niveles
+# el ausentismo se reduce notablemente.
+ggplot(abs_df,aes(x=absenteeism_range,fill=Education.Desc))+
+  geom_bar(position="fill")+xlab("Absenteeism Fill")
 
 ```
 
@@ -531,33 +585,56 @@ Esto no implica que la gente con menor educacion falte mucho o no, pero al menos
 
 * Age y Ausentismo
 ```{r}
-#Ahora analicemos la edad, el ausentismo y como dijimos antess combinemoslo con la educacion, en particular para los de high school.
+#Ahora analicemos la edad, el ausentismo y como dijimos antess combinemoslo con
+# la educacion, en particular para los de high school.
 
-# En general en "porcentaje" se ausentan mas veces los de 20 años, pero si vemos a que medida que aumenta la edad, aumenta tambien la cantidad de horas que se ausentan los empleados, se ve esa minima tendencia aqui:
-ggplot(abs_df,aes(x=age_range,fill=absenteeism_range))+geom_bar(position="fill")
+# En general en "porcentaje" se ausentan mas veces los de 20 años, pero si vemos
+# a que medida que aumenta la edad, aumenta tambien la cantidad de horas que se
+# ausentan los empleados, se ve esa minima tendencia aqui:
+ggplot(abs_df,aes(x=age_range,fill=absenteeism_range))+
+  geom_bar(position="fill")
 
-#Y por lo que terminamos viendo aqui, los que mas se ausentan en realidad son los del rango de los 30 años.
-ggplot(abs_df,aes(x=absenteeism_range,fill=age_range))+geom_bar(position="fill")
+# Y por lo que terminamos viendo aqui, los que mas se ausentan en realidad son 
+# los del rango de los 30 años.
+ggplot(abs_df,aes(x=absenteeism_range,fill=age_range))+
+  geom_bar(position="fill")
 
-# Y con este ultima grafica pareciera que los mas faltan son los que llegaron hasta el high school, y son mayores de 30 años.
-ggplot(abs_df,aes(x=absenteeism_range,fill=Education.Desc))+geom_bar(position="fill")+facet_wrap(~age_range)
+# Y con este ultima grafica pareciera que los mas faltan son los que llegaron 
+# hasta el high school, y son mayores de 30 años.
+ggplot(abs_df,aes(x=absenteeism_range,fill=Education.Desc))+
+  geom_bar(position="fill")+facet_wrap(~age_range)
 
-# pero no podemos decir lo mismo si lo vemos de esta forma, ya que en porcentajes tanto graduados como tambien postgraduados tienen altos porcentajes de ausentismo incluso en el rango de los 20 años.
-ggplot(abs_df,aes(x=absenteeism_range,fill=age_range))+geom_bar(position="fill")+facet_wrap(~Education.Desc)
+# pero no podemos decir lo mismo si lo vemos de esta forma, ya que en porcentajes
+# tanto graduados como tambien postgraduados tienen altos porcentajes de
+# ausentismo incluso en el rango de los 20 años.
+ggplot(abs_df,aes(x=absenteeism_range,fill=age_range))+
+  geom_bar(position="fill")+facet_wrap(~Education.Desc)
 ```
 
 * Smokers & Drinkers
 
 ```{r}
-# Con estas dos comparaciones podemos ver que el fumador tiene menos peso que el bebedor, ya que un fumador puede fumar o no, podemos decir que hay un 50 y 50. Pero es claro viendolo desde el punto de vista de los bebedores sociales: hay muy pocos fumadores, sea cual sea su condicion. Eso es bueno mas alla del dataset, un vicio menos!
+# Con estas dos comparaciones podemos ver que el fumador tiene menos peso que el
+# bebedor, ya que un fumador puede fumar o no, podemos decir que hay un 50 y 50.
+# Pero es claro viendolo desde el punto de vista de los bebedores sociales: hay
+# muy pocos fumadores, sea cual sea su condicion. Eso es bueno mas alla del 
+# dataset, un vicio menos!
 
-smoker = ggplot(abs_df,aes(x=as.factor(Social.smoker),fill=as.factor(Social.drinker)))+geom_bar(position="fill")+facet_wrap(~absenteeism_range)
-drinker = ggplot(abs_df,aes(x=as.factor(Social.drinker),fill=as.factor(Social.smoker)))+geom_bar(position="fill")+facet_wrap(~absenteeism_range)
+smoker = ggplot(abs_df,aes(x=as.factor(Social.smoker),
+                           fill=as.factor(Social.drinker)))+
+  geom_bar(position="fill")+
+  facet_wrap(~absenteeism_range)
+
+drinker = ggplot(abs_df,aes(x=as.factor(Social.drinker),
+                            fill=as.factor(Social.smoker)))+
+  geom_bar(position="fill")+
+  facet_wrap(~absenteeism_range)
 
 smoker
 drinker
 
-# Digamos que tienen mas tendencia a faltar los bebedores sociales y no asi los fumadores.
+# Digamos que tienen mas tendencia a faltar los bebedores sociales y no asi 
+# los fumadores.
 
 ```
 
@@ -567,11 +644,19 @@ Pero que pasa ahora con el indice de masa corporal y la distancia al trabajo?
 * BMI y Ausentismo
 
 ```{r}
-# en valores absolutos parece no haber una gran diferencia entre las personas de peso normal vs los empleados con sobrepeso u obesos
-abs = ggplot(abs_df,aes(x=absenteeism_range,fill=BMI))+geom_bar()+theme(axis.text.x=element_text(size=8,angle=90))+xlab("Valores Absolutos")
+# en valores absolutos parece no haber una gran diferencia entre las personas 
+# de peso normal vs los empleados con sobrepeso u obesos
+abs = ggplot(abs_df,aes(x=absenteeism_range,fill=BMI))+
+  geom_bar()+
+  theme(axis.text.x=element_text(size=8,angle=90))+
+  xlab("Valores Absolutos")
 
-# Pero si lo vemos en porcentajes, parece que en general los empleados con peso normal faltaran mas, por lo que tener sobrepeso no es algo que afecte al presentimo.
-per = ggplot(abs_df,aes(x=absenteeism_range,fill=BMI))+geom_bar(position="fill")+xlab("Porcentajes")+theme(axis.text.x=element_text(size=8,angle=90))
+# Pero si lo vemos en porcentajes, parece que en general los empleados con peso
+# normal faltaran mas, por lo que tener sobrepeso no es algo que afecte al presentimo.
+per = ggplot(abs_df,aes(x=absenteeism_range,fill=BMI))+
+  geom_bar(position="fill")+
+  xlab("Porcentajes")+
+  theme(axis.text.x=element_text(size=8,angle=90))
 
 grid.arrange(abs,per, nrow = 1, ncol = 2)
 ```
@@ -579,11 +664,20 @@ grid.arrange(abs,per, nrow = 1, ncol = 2)
 * Distancia y Ausentismo
 
 ```{r}
-g1 = ggplot(abs_df,aes(x=absenteeism_range,fill=(distance_range)))+geom_bar(position="fill")+xlab("Porcentajes")+theme(axis.text.x=element_text(size=8,angle=90))
+g1 = ggplot(abs_df,aes(x=absenteeism_range,fill=(distance_range)))+
+  geom_bar(position="fill")+xlab("Porcentajes")+
+  theme(axis.text.x=element_text(size=8,angle=90))
 
-g2 = ggplot(abs_df,aes(x=absenteeism_range,fill=(distance_range)))+geom_bar()+xlab("Valores Absolutos")+theme(axis.text.x=element_text(size=8,angle=90))
+g2 = ggplot(abs_df,aes(x=absenteeism_range,fill=(distance_range)))+
+  geom_bar()+xlab("Valores Absolutos")+
+  theme(axis.text.x=element_text(size=8,angle=90))
 
-# Con los rangos de distancia que armamos no parece haber una gran diferencia o algo que nos indique que rango falta mas o menos, pero si hubieramos agrupado en 2 rangos entre menos de 20km vs mas de 20km, ahi veriamos claramente una diferencia. Hay una gran diferencia entre ambas rangos de distancia. Cuanto mas lejos vivan parece que hubiera una tendencia a que se ausenten mas.
+# Con los rangos de distancia que armamos no parece haber una gran diferencia o
+# algo que nos indique que rango falta mas o menos, pero si hubieramos agrupado
+# en 2 rangos entre menos de 20km vs mas de 20km, ahi veriamos claramente una
+# diferencia. Hay una gran diferencia entre ambas rangos de distancia. Cuanto mas
+# lejos vivan parece que hubiera una tendencia a que se ausenten mas.
+
 grid.arrange(g1,g2, nrow = 1, ncol = 2)
 ```
 
@@ -668,7 +762,8 @@ Pero este paso podemos "saltearlo" haciendo True el parametro scale de la funcio
 ```{r}
 set.seed(123)
 
-# Con esta funcion prcomp podemos estandarizar las variables y hacer que la desviacion estandar sea 1 con el parametro scale=TRUE
+# Con esta funcion prcomp podemos estandarizar las variables y hacer que la
+# desviacion estandar sea 1 con el parametro scale=TRUE
 pca <- prcomp(abs_df[,2:20], scale = TRUE)
 names(pca)
 
@@ -676,7 +771,9 @@ names(pca)
 sort(pca$center, decreasing =TRUE)
 
 
-# Mientras que rotation contiene el valor de los loadings ϕ para cada componente (eigenvector). El número de componentes principales se corresponde con el mínimo(n-1,p), que en este caso es  min(740,19)=19
+# Mientras que rotation contiene el valor de los loadings ϕ para cada componente
+# (eigenvector). El número de componentes principales se corresponde con el 
+# mínimo(n-1,p), que en este caso es  min(740,19)=19
 pca_rot = pca$rotation
 
 # veamos algunas registros:
@@ -691,12 +788,16 @@ apply(X = pca_rot, MARGIN = 2, FUN = var)
 Entender el vector de loadings que forma cada componente nos puede ayudar a interpretar que clase de información capta cada componente, por ejemplo si miramos la componente 1:
 
 ```{r}
-# lo que vemos es que la primer componente capta mas informacion de la variable Education, cantidad de mascotas y gastos de viaje positivamente y negativamente del BMI, Weight y Service Time.
+# lo que vemos es que la primer componente capta mas informacion de la variable
+# Education, cantidad de mascotas y gastos de viaje positivamente y negativamente
+# del BMI, Weight y Service Time.
 sort(pca_rot[,'PC1'], decreasing =TRUE)
-# y asi podriamos seguir analizando el resto de las componentes para entender que variables tienen mas pesos sobre otras.
+# y asi podriamos seguir analizando el resto de las componentes para entender
+# que variables tienen mas pesos sobre otras.
 
 
-# Otra de las variables que genera la funcion prcomp es la matriz x, la cual es el resultado de multiplicar los datos por los loadings
+# Otra de las variables que genera la funcion prcomp es la matriz x, la cual es
+# el resultado de multiplicar los datos por los loadings
 head(pca$x)
 
 # 740 valores x 19 componentes
@@ -757,6 +858,7 @@ La línea roja discontinua indica el valor medio de contribución. Para una dete
 ### 4.3. Pruebas Estadisticas
 
 #### 4.3.1. Contraste de Hipotesis
+
 
 Anteriormente en los analisis visuales que hemos hecho vimos que el personal con diferentes niveles de educacion parecian tener diferencia en horas de ausentismo e incluso encontrabamos mas horas de ausentismos segun la edad del empleado y lo mismo sucedia con el indice de masa corporal.
 
@@ -823,7 +925,11 @@ Entonces dado que el p-value es mayor que alpha, se dispone de evidencia suficie
 A partir de aqui graficos de correlacion y heatmaps es posible ver como se correlacionan las variables de un dataset
 
 ```{r}
-# Una de las herramientas más útiles es calcular la matriz de correlación entre las variables. Con la función qplot y la correlación de variables, calculada con la función cor, podemos visualizar de manera fácil aquellas variables más correlacionadas, que corresponden a una intensidad mayor de color.
+# Una de las herramientas más útiles es calcular la matriz de correlación entre
+# las variables. Con la función qplot y la correlación de variables, calculada con
+# la función cor, podemos visualizar de manera fácil aquellas variables más
+# correlacionadas, que corresponden a una intensidad mayor de color.
+
 heat <- abs_df[,2:21]
   
 qplot(x=Var1, y=Var2, data=melt(cor(heat, use="p")), fill=value, geom="tile") +
@@ -833,7 +939,9 @@ qplot(x=Var1, y=Var2, data=melt(cor(heat, use="p")), fill=value, geom="tile") +
 
 
 ```{r}
-# El heatmap nos permite ir un paso más allá y agrupar las variables que tienen más relación entre ellas, a partir de un algoritmo de clustering a partir de la información de la correlación
+# El heatmap nos permite ir un paso más allá y agrupar las variables que tienen
+# más relación entre ellas, a partir de un algoritmo de clustering a partir de la
+# información de la correlación
 abs_matrix <- as.matrix(scale(cor(abs_df[,2:21], use="p")))
 heatmap(abs_matrix, Colv=F, scale='none')
 ```
@@ -946,23 +1054,25 @@ testing_mse
 # Tabla con los coeficientes de determinación de cada modelo
 # Donde iremos guardando todas las variables resultado para su 
 # posterior analisis
-resultados = data.frame("modelo_all", summary(modelo_all)$r.squared, training_mse, testing_mse)
+resultados = data.frame("modelo_all", summary(modelo_all)$r.squared,
+                        training_mse, testing_mse)
 colnames(resultados) <- c("Modelo", "R^2", "training_MSE", "testing_MSE")
 ```
+Arriba vemos que solo 3 de todas las variables combinadas son significativas para el modelo, de ahi el bajo $R^2$ obtenido.
 
-
-Ahora creemos el modelo de regresion a partir de las componentes principales. En este caso utilizaremos PCR, el método Principal Components Regression PCR consiste en ajustar un modelo de regresión lineal por mínimos cuadrados empleando como predictores las componentes generadas a partir del analisis de componentes principales (PCA) anteriormente realizado. De esta forma, con un número reducido de componentes se puede explicar la mayor parte de la varianza de los datos.
+Ahora creemos el modelo de regresion a partir de las componentes principales. En este caso utilizaremos PCR, el método Principal Components Regression consiste en ajustar un modelo de regresión lineal por mínimos cuadrados empleando como predictores las componentes generadas a partir del analisis de componentes principales (PCA) anteriormente realizado. De esta forma, con un número reducido de componentes se puede explicar la mayor parte de la varianza de los datos.
 
 Sabiamos que si queriamos explicar al menos el 70% de la varianza debiamos minimo usar 8 componentes principales como vemos aqui:
 
 ```{r}
-summary(pca)$importance[, 1:10]
+summary(pca)$importance[, 1:8]
 ```
 
 Entonces apliquemos pcr para ello. Con la función pcr() del paquete pls se evita tener que codificar cada uno de los pasos intermedios.
 
 ```{r}
-modelo_pcr <- pcr(formula = Absenteeism.time.in.hours ~ ., data = training_x, scale. = TRUE, ncomp = 8)
+modelo_pcr <- pcr(formula = Absenteeism.time.in.hours ~ ., data = training_x,
+                  scale. = TRUE, ncomp = 8)
 summary(modelo_pcr)
 
 training_mse_pcr <- mean((modelo_pcr$fitted.values - training_y)^2)
@@ -975,7 +1085,9 @@ testing_mse_pcr
 resultados = rbind(resultados, c("modelo_pcr", NA, training_mse_pcr, testing_mse_pcr))
 ```
 
-Por ultimo usemos las 8 variables mas correlacionadas obtenidas en el paso "XXXX" para contruir el 3er modelo.
+Vemos que con pcr el modelo predice mejor dado que notamos una disminucion del MSE con los datos de testing. Y de hecho es un valor menor al del modelo con todas las variables.
+
+Por ultimo usemos las 8 variables mas correlacionadas obtenidas en el paso "4.2.2" para contruir el 3er modelo.
 
 ```{r}
 modelo_cor <- lm(Absenteeism.time.in.hours ~
@@ -993,15 +1105,15 @@ predicciones_cor <- predict(modelo_cor, newdata = testing_x)
 testing_mse_cor <- mean((predicciones_cor - testing_y)^2)
 testing_mse_cor
 
-resultados = rbind(resultados, c("modelo_cor", summary(modelo_cor)$r.squared, training_mse_cor, testing_mse_cor))
+resultados = rbind(resultados, c("modelo_cor", summary(modelo_cor)$r.squared,
+                                 training_mse_cor, testing_mse_cor))
 
 ```
 
+Por ultimo con este modelo vemos que el $R^2$ es aun mas bajo, y esta combinacion de variables a pesar de ser las mas correlacionadas (aunque ya sabiamos de antemano que eran valores muy bajos, mas cercanos a la no correlacion "< 0.5" que a estar fuertemente correlacionadas "> 0.8") solo algunas de ellas son significativas para el modelo. De ahi tambien el valor bajo de $R^2$ y de ahi tambien que un modelo de regresion lineal no aplicaba a este conjunto de datos.
 
-******
 ## 5. Representacion de los Resultados
 
-******
 
 Representemos aqui el resultado de haber generado 3 modelos para predecir el ausentismo:
 
@@ -1011,18 +1123,18 @@ resultados
 
 Como vemos el $R^2$ es bastante malo para los 3 modelos creados. Por lo que que podemos decir que ninguno de estos modelos de regresion lineal ajustan bien a los datos que tenemos. Incluso, por mas que para cada uno de ellos el MSE sea menor para el dataset de testing, lo cual suele indicar una buena capacidad de prediccion del modelo cuando este MSE es menor al MSE del dataset de training,....el $R^2$ sigue siendo demasiado bajo.
 
-Ni siquiera aplicando PCA logramos una gran mejora, porque si bien logramos bajar el mean squared error respecto al modelo con todas las variables. No es un disminucion muy significativa. 
+Ni siquiera aplicando PCR logramos una gran mejora, porque si bien logramos bajar el mean squared error respecto al modelo con todas las variables. No es un disminucion muy significativa. 
 
 Tal vez lo mejor es utilizar regresion logistica y buscar predecir la variable dependiente de manera dicotomica tal como habiamos analizado en el EDA al dicotomizar la variable. O incluso en lugar de predecir n rangos, podriamos buscar con regresion logistica predecir si el empleado se ausentara poco o se ausentara demasiado. Por ejemplo creando una variable que represente los que se ausentan menos de 16 hs o los que se ausentan mas de eso.
 O incluso se podria utilizar arboles de decision para generar reglas que nos ayuden a generar modelos que ajusten mejor a los datos.
 
 
-******
+
 ## 6. Resolucion del Problema
 
-******
 
-Si bien no hemos logrado llegar a un modelo que ajuste bien a los datos, hemos podido identificar varios puntos que nos servirian para una segunda iteracion de este trabajo como ser:
+
+Si bien no hemos logrado llegar a un modelo de regresion lineal que ajuste bien a los datos, hemos podido identificar varios puntos que nos servirian para una segunda iteracion de este trabajo como ser:
 
 - Con el EDA hemos podido exponer ciertos comportamientos de los datos que son relevantes a la hora de entender que empleados se ausentan mas o menos segun sus caracteristicas.
 
@@ -1031,9 +1143,14 @@ Si bien no hemos logrado llegar a un modelo que ajuste bien a los datos, hemos p
 - Con los contrastes de hipotesis pudimos revalidar o inferir situaciones de la poblacion que no fueron tan visibles con un simple analisis visual.
 
 
-******
+## 7. Codigo
+
+El codigo para generar este PDF fue realizado en R Markdown, el cual puede ser encontrado en el siguiente repositorio github:
+
+[Absenteeism at work cleaning code](https://github.com/PythonGreen/absenteeism_at_work_cleaning/blob/main/code/pablodelgado-PRAC2.Rmd)
+
 # Recursos 
-******
+
 
   + Calvo M, Subirats L, Pérez D (2019). Introducción a la limpieza y análisis de los datos. Editorial UOC.
   + [Espacio de recursos UOC para ciencia de datos](http://datascience.recursos.uoc.edu/es/)
