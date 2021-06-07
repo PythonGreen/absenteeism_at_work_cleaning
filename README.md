@@ -9,9 +9,8 @@ La actividad ha sido realizada de manera individual por **Pablo A. Delgado**.
 ## Acerca de este proyecto
 
 * El contenido de este repositorio es parte de la Práctica 2 de la asignatura: "Tipologia y ciclo de vida de los datos".
-* Asignatura: Tipologia y ciclo de vida de los datos.
-* [Master de Data Science](http://www.uoc.edu/portal/ca/index.html). 
-* Universitat Oberta de Catalunya..
+* [Master de Data Science](https://estudios.uoc.edu/es/masters-universitarios/data-science/presentacion). 
+* [Universitat Oberta de Catalunya](http://www.uoc.edu/portal/ca/index.html).
 * Profesores: María Isabel Guitart Hormigo y Daniel Romero Perez
 
 ## Dataset
