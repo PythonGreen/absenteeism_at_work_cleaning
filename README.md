@@ -22,4 +22,3 @@ https://github.com/PythonGreen/absenteeism_at_work_cleaning/XXXXXXX
 ## Licencia
 
 El contenido de este proyecto esta licencia bajo la Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International, y el código fuente usado para mostrar este contenido esta licenciado bajo la MIT license.
-
