@@ -13,12 +13,6 @@ La actividad ha sido realizada de manera individual por **Pablo A. Delgado**.
 * [Universitat Oberta de Catalunya](http://www.uoc.edu/portal/ca/index.html).
 * Profesores: María Isabel Guitart Hormigo y Daniel Romero Perez
 
-## Dataset
-
-Puede chequear el dataset utilizado aqui:
-
-https://github.com/PythonGreen/absenteeism_at_work_cleaning/XXXXXXX
-
 ## Licencia
 
 El contenido de este proyecto esta licencia bajo la Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International, y el código fuente usado para mostrar este contenido esta licenciado bajo la MIT license.
