@@ -1,9 +1,7 @@
-# absenteeism_at_work_cleaning
+# Absenteeism at Work Cleaning
 
-Absenteeism at Work Cleaning
 Estadisticas de los jugadores y jugadoras de la NBA incluidas los salarios
-Autor
-Pablo Alejandro Delgado
+Autor: Pablo Alejandro Delgado
 
 Acerca de este software
 Este software es parte de la Práctica 2 de la asignatura: "Tipologia y ciclo de vida de los datos".
